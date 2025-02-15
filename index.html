@@ -5,21 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Web AR - Muzium Penang</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://rawgit.com/jeromeetienne/AR.js/1.7.2/aframe/build/aframe-ar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.0/dist/mindar-image-aframe.prod.js"></script>
 </head>
 <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
-        <!-- Static 3D Model -->
-        <a-entity position="0 0 -5"
-                  gltf-model="3D asset for Web AR/Muzium_Penang.glb"
+    <a-scene mindar-image="uiLoading: yes; maxTrack: 1" 
+             embedded 
+             vr-mode-ui="enabled: false">
+        
+        <!-- 3D Model (Now Using SLAM for Surface Detection) -->
+        <a-entity mindar-anchor 
+                  gltf-model="3D asset for Web AR/Muzium_Penang.glb" 
+                  position="0 0 0" 
                   scale="5 5 5">
         </a-entity>
 
-        <!-- Location Indicator Text -->
-        <a-text value="Muzium Penang"
-                position="0 3 -5"
-                color="black"
-                align="center"
+        <!-- Instruction Text -->
+        <a-text value="Point your camera at a flat surface" 
+                position="0 2 -3" 
+                color="black" 
+                align="center" 
                 scale="2 2 2">
         </a-text>
     </a-scene>
