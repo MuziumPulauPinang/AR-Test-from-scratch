@@ -9,19 +9,22 @@
 </head>
 <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false;">
-        <!-- 3D Model (NOT following the camera) -->
+        <!-- 3D Model (Draggable & Properly Positioned) -->
         <a-entity id="building" 
                   gltf-model="3D asset for Web AR/Muzium_Penang.glb" 
                   scale="5 5 5"
-                  gps-entity-place>
+                  position="0 0 0"
+                  gps-entity-place
+                  gesture-handler>
         </a-entity>
 
-        <!-- Text to show the current location of the object -->
+        <!-- Location Text (Black for Visibility) -->
         <a-text id="locationText" 
                 value="Loading location..." 
                 position="0 2 -3" 
-                color="white" 
-                align="center">
+                color="black" 
+                align="center"
+                scale="2 2 2">
         </a-text>
     </a-scene>
 
@@ -39,6 +42,32 @@
             },
             { enableHighAccuracy: true }
         );
+
+        // Add gesture controls for dragging
+        AFRAME.registerComponent('gesture-handler', {
+            init: function () {
+                let el = this.el;
+                let dragging = false;
+                let startPos = null;
+
+                el.addEventListener('mousedown', function (event) {
+                    dragging = true;
+                    startPos = event.detail.intersection.point;
+                });
+
+                el.addEventListener('mouseup', function () {
+                    dragging = false;
+                });
+
+                el.addEventListener('mousemove', function (event) {
+                    if (!dragging) return;
+                    let newPos = event.detail.intersection.point;
+                    el.object3D.position.x += newPos.x - startPos.x;
+                    el.object3D.position.z += newPos.z - startPos.z;
+                    startPos = newPos;
+                });
+            }
+        });
     </script>
 </body>
 </html>
