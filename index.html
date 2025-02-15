@@ -9,44 +9,19 @@
 </head>
 <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
-        <!-- Fixed 3D Model (Not Following Camera) -->
-        <a-entity id="building" 
-                  gltf-model="3D asset for Web AR/Muzium_Penang.glb" 
-                  gps-entity-place
-                  static-body>
+        <!-- 3D Model Pinned at Specific GPS Location -->
+        <a-entity gps-entity-place="latitude: 6.275992; longitude: 100.413539"
+                  gltf-model="3D asset for Web AR/Muzium_Penang.glb"
+                  scale="5 5 5">
         </a-entity>
 
-        <!-- Location Text (Black for Visibility) -->
-        <a-text id="locationText" 
-                value="Loading location..." 
-                position="0 2 -3" 
-                color="black" 
+        <!-- Location Indicator Text -->
+        <a-text value="Muzium Penang"
+                position="0 3 -5"
+                color="black"
                 align="center"
                 scale="2 2 2">
         </a-text>
-
-        <!-- Custom Camera (Fix Zoom & Allow Manual Control) -->
-        <a-entity camera 
-                  look-controls="enabled: true"
-                  wasd-controls-enabled="true"
-                  position="0 1.6 5">
-        </a-entity>
     </a-scene>
-
-    <script>
-        // Get GPS location and update the text
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                let latitude = position.coords.latitude.toFixed(6);
-                let longitude = position.coords.longitude.toFixed(6);
-                document.getElementById("locationText").setAttribute("value", `Lat: ${latitude}, Lon: ${longitude}`);
-            },
-            function(error) {
-                console.log("Error getting location", error);
-                document.getElementById("locationText").setAttribute("value", "Location access denied.");
-            },
-            { enableHighAccuracy: true }
-        );
-    </script>
 </body>
 </html>
