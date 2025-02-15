@@ -2,20 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Web AR - Muzium Penang</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://rawgit.com/jeromeetienne/AR.js/1.7.2/aframe/build/aframe-ar.min.js"></script>
 </head>
 <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false;">
-        <!-- 3D Model (Draggable & Properly Positioned) -->
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
+        <!-- Fixed 3D Model (Not Following Camera) -->
         <a-entity id="building" 
                   gltf-model="3D asset for Web AR/Muzium_Penang.glb" 
                   scale="5 5 5"
                   position="0 0 0"
                   gps-entity-place
-                  gesture-handler>
+                  static-body>
         </a-entity>
 
         <!-- Location Text (Black for Visibility) -->
@@ -26,6 +26,13 @@
                 align="center"
                 scale="2 2 2">
         </a-text>
+
+        <!-- Custom Camera (Fix Zoom & Allow Manual Control) -->
+        <a-entity camera 
+                  look-controls="enabled: true"
+                  wasd-controls-enabled="true"
+                  position="0 1.6 5">
+        </a-entity>
     </a-scene>
 
     <script>
@@ -42,32 +49,6 @@
             },
             { enableHighAccuracy: true }
         );
-
-        // Add gesture controls for dragging
-        AFRAME.registerComponent('gesture-handler', {
-            init: function () {
-                let el = this.el;
-                let dragging = false;
-                let startPos = null;
-
-                el.addEventListener('mousedown', function (event) {
-                    dragging = true;
-                    startPos = event.detail.intersection.point;
-                });
-
-                el.addEventListener('mouseup', function () {
-                    dragging = false;
-                });
-
-                el.addEventListener('mousemove', function (event) {
-                    if (!dragging) return;
-                    let newPos = event.detail.intersection.point;
-                    el.object3D.position.x += newPos.x - startPos.x;
-                    el.object3D.position.z += newPos.z - startPos.z;
-                    startPos = newPos;
-                });
-            }
-        });
     </script>
 </body>
 </html>
